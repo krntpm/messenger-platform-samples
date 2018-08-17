@@ -15,15 +15,39 @@
  */
 
 'use strict';
-
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 // Imports dependencies and set up http server
 const
     request = require('request'),
     express = require('express'),
     body_parser = require('body-parser'),
     dotenv = require('dotenv').config();
+    
 
 var app = express();
+var _axios = require('axios');
+
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
+var _axios2 = _interopRequireDefault(_axios);
+_axios2.default.defaults.timeout = 6000;
+
+_axios2.default.interceptors.request.use(function (config) {
+    config.requestTime = new Date().getTime();
+    return config;
+}, function (err) {
+    return Promise.reject(err);
+});
+
+_axios2.default.interceptors.response.use(function (res) {
+   // logger.logService({}, res.config, res, res.request.connection);
+    return res;
+}, function (err) {
+    //logger.logService(err, err.config, {}, err.request.connection);
+    return Promise.reject(err);
+});
 
 app.set('port', process.env.PORT || 5000);
 app.use(body_parser.json());
@@ -52,6 +76,31 @@ app.get('/options', (req, res, next) => {
     }
 });
 
+app.get('/test',testRes);
+
+async function testRes(req,res){
+ var body ={
+    channel: "Google_Assistant",
+    term: "เช็คยอดเงิน",
+    intent: "display",
+    method: "message",
+    timeout: 10000,
+    userId:  "111111111111111111111111111"
+  };
+  var agent = new _https2.default.Agent({
+    rejectUnauthorized: false
+  });
+  var header={};
+  var randomNumber = Math.floor(Math.random() * 1000000 + 1).toString();
+  //header['x-api-request-id'] = "QWlzQEFvZy1ham9pYWRwd2Vpdm5wT2g5U0xrZFZKdzYwSkZjOXBpd2VqdmIycG93bg==";
+  header['x-api-request-id'] = 'self-' + new Date().getTime() + randomNumber;
+  var response = await _axios.post('https://dev-askaunjai.ais.co.th:8443/social-adapter-fe/chatbot', body,{
+    httpsAgent: agent,
+    headers: header
+   })
+   console.log(JSON.stringify(response['data']));
+   res.json(response['data']['params']['intent']);
+} 
 // Handle postback from webview
 app.get('/optionspostback', (req, res) => {
     let body = req.query;
@@ -86,6 +135,8 @@ app.post('/webhook', (req, res) => {
             // pass the event to the appropriate handler function
             if (webhook_event.message) {
                 handleMessage(sender_psid, webhook_event.message);
+               // let message = webhook_event.message.text;
+
             } else if (webhook_event.postback) {
                 handlePostback(sender_psid, webhook_event.postback);
             }
@@ -131,7 +182,7 @@ app.get('/webhook', (req, res) => {
 
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+async function handleMessage(sender_psid, received_message) {
     let response;
 
     // Checks if the message contains text
@@ -141,8 +192,17 @@ function handleMessage(sender_psid, received_message) {
                 response = setRoomPreferences(sender_psid);
                 break;
             default:
+            var resApi = await callApi('https://dev-askaunjai.ais.co.th:8443/social-adapter-fe/chatbot',{
+                channel: "Google_Assistant",
+                term: received_message.text,
+                intent: "display",
+                method: "message",
+                timeout: 10000,
+                userId: '11111111111111'
+              });
+                console.log(JSON.stringify(resApi['data']['data']['message'][0]));
                 response = {
-                    "text": `You sent the message: "${received_message.text}".`
+                    "text": `${resApi['data']['data']['message'][0]}.`
                 };
                 break;
         }
@@ -154,6 +214,34 @@ function handleMessage(sender_psid, received_message) {
 
     // Send the response message
     callSendAPI(sender_psid, response);
+}
+
+async function callApi(url,objParams){
+   return  _axios.post(url, getBody(objParams),getHeader());  
+} 
+
+function getBody(objParams){
+    return {
+        channel: objParams.channel,
+        term: objParams.term,
+        intent: objParams.intent,
+        method: objParams.method,
+        timeout: objParams.timeout,
+        userId: objParams.userId
+      };
+}
+
+function getHeader(){
+      var agent = new _https2.default.Agent({
+        rejectUnauthorized: false
+      });
+      var header={};
+      var randomNumber = Math.floor(Math.random() * 1000000 + 1).toString();
+      header['x-api-request-id'] = 'self-' + new Date().getTime() + randomNumber;
+    return {
+        httpsAgent: agent,
+        headers: header
+    }
 }
 
 // Define the template and webview
