@@ -38,6 +38,7 @@ app.post('/webhook', (req, res) => {
   let body = req.body;
 
   // Check the webhook event is from a Page subscription
+  console.log(body);
   if (body.object === 'page') {
 
     body.entry.forEach(function(entry) {
