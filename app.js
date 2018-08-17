@@ -25,20 +25,7 @@ const
 
 var app = express();
 
-const https = require('https');
-const fs = require('fs');
-
-
-const options = {
-  key: fs.readFileSync('/app/cert/dev-ass-cert2018/dev-askaunjai.key'),
-  cert: fs.readFileSync('/app/cert/dev-ass-cert2018/dev-askaunjai.ais.co.th.crt'),
-  ca: fs.readFileSync('/app/cert/dev-ass-cert2018/GlobalSignOrganizationValidationCA-SHA256-G2.crt')
-};
-
-
-
-
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 5000);
 app.use(body_parser.json());
 app.use(express.static('public'));
 
@@ -46,17 +33,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const SERVER_URL = process.env.SERVER_URL;
 const APP_SECRET = process.env.APP_SECRET;
 
-//app.listen(app.get('port'), () => {
-//    console.log('Node app is running on port', app.get('port'));
-//});
-
-/*https.createServer(options, (req, res) => {
-    console.log('Node app is running on port', app.get('port'));
-  res.writeHead(200);
-  res.end('hello world\n');
-}).listen(3000);*/
-
-https.createServer(options, app).listen(app.get('port'), () => {
+app.listen(app.get('port'), () => {
     console.log('Node app is running on port', app.get('port'));
 });
 
@@ -98,7 +75,6 @@ app.post('/webhook', (req, res) => {
         body.entry.forEach(entry => {
 
             // Gets the body of the webhook event
-            console.log(entry.messaging);
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
 
@@ -148,7 +124,6 @@ app.get('/webhook', (req, res) => {
 
         } else {
             // Responds with '403 Forbidden' if verify tokens do not match
-            console.log('Else');
             res.sendStatus(403);
         }
     }
