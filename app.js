@@ -202,7 +202,7 @@ async function handleMessage(sender_psid, received_message) {
               });
                 console.log(JSON.stringify(resApi['data']['data']['message'][0]));
                 response = {
-                    "text": `${resApi['data']['data']['message'][0].replace(/<[^>]+>/g, '')}.`
+                    "text": `${resApi['data']['data']['message'][0]}.`
                 };
                 break;
         }
