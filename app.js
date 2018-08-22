@@ -184,7 +184,7 @@ app.get('/webhook', (req, res) => {
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
     let response;
-
+    var text = '';
     // Checks if the message contains text
     if (received_message.text) {
         switch (received_message.text.replace(/[^\w\s]/gi, '').trim().toLowerCase()) {
@@ -192,7 +192,7 @@ async function handleMessage(sender_psid, received_message) {
                 response = setRoomPreferences(sender_psid);
                 break;
             default:
-            var resApi = await callApi('https://dev-askaunjai.ais.co.th:8443/social-adapter-fe/chatbot',{
+            let resApi = await callApi('https://dev-askaunjai.ais.co.th:8443/social-adapter-fe/chatbot',{
                 channel: "Google_Assistant",
                 term: received_message.text,
                 intent: "display",
@@ -201,6 +201,59 @@ async function handleMessage(sender_psid, received_message) {
                 userId: '11111111111111'
               });
                 console.log(JSON.stringify(resApi['data']['data']['message'][0]));
+                            
+                
+              
+                let responseData = resApi.data;
+                let responseStatusCode = responseData['statusCode'];
+                console.info(`Status Code ${responseStatusCode}`);
+                if(responseStatusCode === '20000'){
+                    let responseParams = responseData['params'];
+                    let messageDataObj = responseData['data'];
+                    let intentData  =responseParams['intent'];
+                   
+                    console.info(`intent : ${responseParams['intent']}  and method : ${responseParams['method']}`);
+                    var intentTagData = responseParams['intentTag'];
+                    if(intentTagData.toLocaleUpperCase().indexOf("CHECK")>-1){
+                        intentData = 'check';
+                    }
+                    switch (intentData) {
+                        case 'display':
+                            text = replyDisplay(messageDataObj);
+                            break;
+                        case 'ir':
+                             console.info("in ir intent");
+                             text = "Ir";  
+                             break;
+                        case 'ontop':
+                            console.info("in ontop intent");
+                            text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
+                            break;
+                        case 'check':
+                              var methodName = intentTagData.split('_').pop();
+                              if(methodName.toLocaleUpperCase()==='BALANCE'){
+                                     text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
+                              }else if(methodName.toLocaleUpperCase()==='BALANCEINTERNET'){
+                                     text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
+                              }else{
+                                 this.replyDisplay(messageDataObj);
+                                 //conv.ask(this.TEXT.SERVICE_ERROR);
+                              }
+                            break;
+                        // case 'gsso':
+                        //     break;
+                        case 'authenticate':
+                            break;
+                        default:
+                            console.info("in default switch case");
+                            this.replyDisplay(messageDataObj);
+                            break;
+                    }
+                }else{
+                    text = "Error Something wrong";
+                }
+
+                
                 response = {
                     "text": `${urlify(resApi['data']['data']['message'][0])}.`
                 };
@@ -219,6 +272,47 @@ async function handleMessage(sender_psid, received_message) {
 async function callApi(url,objParams){
    return  _axios.post(url, getBody(objParams),getHeader());  
 } 
+function modifyMessage(messages){
+            let results = {};
+           for(var message of messages){
+                if(message.indexOf("{{msgSelect:")>-1){
+                    results['msgSelect']= message.substring(message.indexOf('{{msgSelect:') +
+                                  12, message.indexOf('}}')).replace(/<[^>]+>/g, '');
+                    console.info(results['msgSelect']);
+                }else if(message.indexOf('{{msgMore:') > -1 ){
+                            results['msgMore']  = message.substring(message.indexOf('{{msgMore:') +
+                                          10, message.indexOf('}}')).replace(/<[^>]+>/g, '');
+                            console.info(results['msgMore']);
+                      }else{
+                             results['message'] = message.replace(/<[^>]+>/g, '');
+                             console.info(results['message']);
+                           }
+            }
+            return results;    
+}
+function replyDisplay(messageDataObj){
+             var text = '';
+             let messageObj = this.modifyMessage(messageDataObj['message']);
+             if(messageDataObj['msgParam'] !== undefined && 
+                messageDataObj['msgParam']['msgSelect'] !== undefined &&
+                messageObj['msgSelect']!==undefined){
+                    let msgSelects = [];
+                    for(var msgSelectObj of messageDataObj['msgParam']['msgSelect']){
+                        text += msgSelectObj['title'];
+                    }                   
+                   
+                    return text ' ' + messageObj['msgSelect'];   
+             }else if(messageDataObj['msgParam'] !== undefined && 
+                      messageDataObj['msgParam']['msgMore'] !== undefined &&
+                      messageObj['msgMore']!==undefined){
+                         return messageObj['msgMore'];   
+            }else if(messageObj['message']!==undefined){
+                      return messageObj['message'];
+            }else{
+                      return 'อุ่นใจไม่ตอบสนองกรุณาลองใหม่ภายหลัง';
+            }
+}
+
 
 function getBody(objParams){
     return {
