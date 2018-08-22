@@ -227,14 +227,14 @@ async function handleMessage(sender_psid, received_message) {
                              break;
                         case 'ontop':
                             console.info("in ontop intent");
-                            text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
+                            text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ <a href=\"https://goo.gl/RT5cMp\" target=\"_blank\" data-vtz-browse=\"https://goo.gl/RT5cMp\" data-vtz-link-type=\"Web\">";  
                             break;
                         case 'check':
                               var methodName = intentTagData.split('_').pop();
                               if(methodName.toLocaleUpperCase()==='BALANCE'){
-                                     text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
+                                     text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ <a href=\"https://goo.gl/RT5cMp\" target=\"_blank\" data-vtz-browse=\"https://goo.gl/RT5cMp\" data-vtz-link-type=\"Web\">";  
                               }else if(methodName.toLocaleUpperCase()==='BALANCEINTERNET'){
-                                     text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
+                                     text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ <a href=\"https://goo.gl/RT5cMp\" target=\"_blank\" data-vtz-browse=\"https://goo.gl/RT5cMp\" data-vtz-link-type=\"Web\">";  
                               }else{
                                  replyDisplay(messageDataObj);
                                  //conv.ask(this.TEXT.SERVICE_ERROR);
