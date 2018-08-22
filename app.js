@@ -278,14 +278,14 @@ function modifyMessage(messages){
            for(var message of messages){
                 if(message.indexOf("{{msgSelect:")>-1){
                     results['msgSelect']= message.substring(message.indexOf('{{msgSelect:') +
-                                  12, message.indexOf('}}')).replace(/<[^>]+>/g, '');
+                                  12, message.indexOf('}}'));
                     console.info(results['msgSelect']);
                 }else if(message.indexOf('{{msgMore:') > -1 ){
                             results['msgMore']  = message.substring(message.indexOf('{{msgMore:') +
-                                          10, message.indexOf('}}')).replace(/<[^>]+>/g, '');
+                                          10, message.indexOf('}}'));
                             console.info(results['msgMore']);
                       }else{
-                             results['message'] = message.replace(/<[^>]+>/g, '');
+                             results['message'] = message;
                              console.info(results['message']);
                            }
             }
