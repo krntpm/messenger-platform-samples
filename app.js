@@ -246,17 +246,17 @@ async function handleMessage(sender_psid, received_message) {
                             break;
                         default:
                             console.info("in default switch case");
-                            replyDisplay(messageDataObj);
+                             text = replyDisplay(messageDataObj);
                             break;
                     }
                 }else{
                     text = "Error Something wrong";
                 }
 
-                
+                text = urlify(text);
                 response = {
                  //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
-                   "text": `${urlify(text)}` 
+                   "text": `${text}` 
                 };
                 break;
         }
@@ -368,6 +368,7 @@ function urlify(text) {
    // var urlRegex =/(^|[^\/])(www\.[\S]+(\b|$))/gim;
    var urlRegex = /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?""''=]))?/g
     var urlFull = '';
+    console.log('urlify');
     return  text.replace(urlRegex, function(url) {
         urlFull = url;
         console.log('urlFull:'+urlFull);
