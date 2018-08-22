@@ -255,7 +255,8 @@ async function handleMessage(sender_psid, received_message) {
 
                 
                 response = {
-                    "text": `${urlify(resApi['data']['data']['message'][0])}.`
+                 //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
+                   "text": `${text}.` 
                 };
                 break;
         }
