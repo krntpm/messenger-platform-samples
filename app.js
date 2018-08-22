@@ -267,13 +267,26 @@ function setRoomPreferences(sender_psid) {
 }
 
 // Sends response messages via the Send API
+
+function urlify(text) {
+  //  var urlRegex = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
+   // var urlRegex =/(^|[^\/])(www\.[\S]+(\b|$))/gim;
+   var urlRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s\=\""]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g
+    var urlFull;
+    return  text.replace(urlRegex, function(url) {
+        urlFull = url;
+        return   url;
+    }).concat(' '+urlFull).replace(/<[^>]+>/g, '')
+}
+
 function callSendAPI(sender_psid, response) {
     // Construct the message body
+    
     let request_body = {
         "recipient": {
             "id": sender_psid
         },
-        "message": response
+        "message": urlify(response)
     };
     console.log(request_body);
     // Send the HTTP request to the Messenger Platform
