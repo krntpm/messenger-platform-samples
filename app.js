@@ -368,7 +368,7 @@ function urlify(text) {
    // var urlRegex =/(^|[^\/])(www\.[\S]+(\b|$))/gim;
    var urlRegex = /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?""''=]))?/g
     var urlFull = '';
-    console.log('urlify');
+    console.log('urlify '+text);
     return  text.replace(urlRegex, function(url) {
         urlFull = url;
         console.log('urlFull:'+urlFull);
