@@ -99,7 +99,7 @@ async function testRes(req,res){
     headers: header
    })
    console.log(JSON.stringify(response['data']));
-   res.json(urlify(response['data']['params']['intent']));
+   res.json(response['data']['params']['intent']);
 } 
 // Handle postback from webview
 app.get('/optionspostback', (req, res) => {
@@ -202,7 +202,7 @@ async function handleMessage(sender_psid, received_message) {
               });
                 console.log(JSON.stringify(resApi['data']['data']['message'][0]));
                 response = {
-                    "text": `${resApi['data']['data']['message'][0]}.`
+                    "text": `${urlify(resApi['data']['data']['message'][0])}.`
                 };
                 break;
         }
