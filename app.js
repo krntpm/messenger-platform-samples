@@ -99,7 +99,7 @@ async function testRes(req,res){
     headers: header
    })
    console.log(JSON.stringify(response['data']));
-   res.json(response['data']['params']['intent']);
+   res.json(urlify(response['data']['params']['intent']));
 } 
 // Handle postback from webview
 app.get('/optionspostback', (req, res) => {
@@ -272,7 +272,7 @@ function urlify(text) {
   //  var urlRegex = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
    // var urlRegex =/(^|[^\/])(www\.[\S]+(\b|$))/gim;
    var urlRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s\=\""]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})/g
-    var urlFull;
+    var urlFull = '';
     return  text.replace(urlRegex, function(url) {
         urlFull = url;
         return   url;
@@ -286,7 +286,7 @@ function callSendAPI(sender_psid, response) {
         "recipient": {
             "id": sender_psid
         },
-        "message": urlify(response)
+        "message": response
     };
     console.log(request_body);
     // Send the HTTP request to the Messenger Platform
