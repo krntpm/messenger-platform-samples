@@ -293,7 +293,7 @@ function modifyMessage(messages){
 }
 function replyDisplay(messageDataObj){
              var text = '';
-             let messageObj = this.modifyMessage(messageDataObj['message']);
+             let messageObj = modifyMessage(messageDataObj['message']);
              if(messageDataObj['msgParam'] !== undefined && 
                 messageDataObj['msgParam']['msgSelect'] !== undefined &&
                 messageObj['msgSelect']!==undefined){
