@@ -236,7 +236,7 @@ async function handleMessage(sender_psid, received_message) {
                               }else if(methodName.toLocaleUpperCase()==='BALANCEINTERNET'){
                                      text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ www.ais.co.th";  
                               }else{
-                                 this.replyDisplay(messageDataObj);
+                                 replyDisplay(messageDataObj);
                                  //conv.ask(this.TEXT.SERVICE_ERROR);
                               }
                             break;
@@ -246,7 +246,7 @@ async function handleMessage(sender_psid, received_message) {
                             break;
                         default:
                             console.info("in default switch case");
-                            this.replyDisplay(messageDataObj);
+                            replyDisplay(messageDataObj);
                             break;
                     }
                 }else{
@@ -256,7 +256,7 @@ async function handleMessage(sender_psid, received_message) {
                 
                 response = {
                  //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
-                   "text": `${text}` 
+                   "text": `${urlify(text)}` 
                 };
                 break;
         }
@@ -366,7 +366,7 @@ function setRoomPreferences(sender_psid) {
 function urlify(text) {
   //  var urlRegex = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
    // var urlRegex =/(^|[^\/])(www\.[\S]+(\b|$))/gim;
-   var urlRegex = /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?""''\=\""]))?/g
+   var urlRegex = /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?""''=]))?/g
     var urlFull = '';
     return  text.replace(urlRegex, function(url) {
         urlFull = url;
