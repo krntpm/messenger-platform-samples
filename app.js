@@ -302,7 +302,7 @@ function replyDisplay(messageDataObj){
                         text += msgSelectObj['title'];
                     }                   
                    
-                    return text ' ' + messageObj['msgSelect'];   
+                    return text +' ' + messageObj['msgSelect'];   
              }else if(messageDataObj['msgParam'] !== undefined && 
                       messageDataObj['msgParam']['msgMore'] !== undefined &&
                       messageObj['msgMore']!==undefined){
