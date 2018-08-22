@@ -370,6 +370,7 @@ function urlify(text) {
     var urlFull = '';
     return  text.replace(urlRegex, function(url) {
         urlFull = url;
+        console.log('urlFull:'+urlFull);
         return   url;
     }).concat(' '+urlFull).replace(/<[^>]+>/g, '')
 }
