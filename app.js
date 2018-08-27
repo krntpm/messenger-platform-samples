@@ -126,7 +126,9 @@ app.post('/webhook', (req, res) => {
             // Gets the body of the webhook event
             console.log(entry.messaging);
             let webhook_event = entry.messaging[0];
+            
             console.log(webhook_event);
+             const message = entry.message;
          if (message && message.quick_reply && message.quick_reply.payload == 'pass_to_inbox') {
             
             // quick reply to pass to Page inbox was clicked
@@ -138,7 +140,7 @@ app.post('/webhook', (req, res) => {
             sendQuickReply(psid, text, title, payload);
             HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
         
-         } else if (event.pass_thread_control) {
+         } else if (entry.pass_thread_control) {
             console.log(message + ' pass_thread_control');
             // thread control was passed back to bot manually in Page inbox
             text = 'You passed control back to the Primary Receiver by marking "Done" in the Page Inbox. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
@@ -182,19 +184,7 @@ app.post('/webhook', (req, res) => {
       
     });
 }
-
-
-
-        // Return a '200 OK' response to all events
-        res.status(200).send('EVENT_RECEIVED');
-
-    } else {
-        // Return a '404 Not Found' if event is not from a page subscription
-        res.sendStatus(404);
-    }
-
-});
-
+        
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
 
