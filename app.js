@@ -171,7 +171,7 @@ app.post('/webhook', (req, res) => {
             }
         }
         });
-});
+}});
         
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
