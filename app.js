@@ -117,17 +117,45 @@ app.post('/webhook', (req, res) => {
 
     // Parse the request body from the POST
     let body = req.body;
-        console.log(req);
-     const webhook_events = body.entry[0];
+
     // Check the webhook event is from a Page subscription
     if (body.object === 'page') {
-        console.log(webhook_events);
+
         body.entry.forEach(entry => {
 
             // Gets the body of the webhook event
+            console.log(entry.messaging);
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
+         if (message && message.quick_reply && message.quick_reply.payload == 'pass_to_inbox') {
+            
+            // quick reply to pass to Page inbox was clicked
+            let page_inbox_app_id = 263902037430900;          
+            text = 'The Primary Receiver is passing control to the Page Inbox. \n\n Tap "Take From Inbox" to have the Primary Receiver take control back.';
+            title = 'Take From Inbox';
+            payload = 'take_from_inbox';
+            
+            sendQuickReply(psid, text, title, payload);
+            HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
+        
+         } else if (event.pass_thread_control) {
+            console.log(message + ' pass_thread_control');
+            // thread control was passed back to bot manually in Page inbox
+            text = 'You passed control back to the Primary Receiver by marking "Done" in the Page Inbox. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
+            title = 'Pass to Inbox';
+            payload = 'pass_to_inbox';
+        
+          sendQuickReply(psid, text, title, payload);
 
+         } else if (message && !message.is_echo) {      
+         console.log(message + ' is_echo');
+        // default
+            text = 'Welcome! The bot is currently in control. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
+            title = 'Pass to Inbox';
+            payload = 'pass_to_inbox';
+
+            sendQuickReply(psid, text, title, payload);
+        } else {
             // Get the sender PSID
             let sender_psid = webhook_event.sender.id;
             console.log(`Sender PSID: ${sender_psid}`);
@@ -136,13 +164,26 @@ app.post('/webhook', (req, res) => {
             // pass the event to the appropriate handler function
             if (webhook_event.message) {
                 handleMessage(sender_psid, webhook_event.message);
-               // let message = webhook_event.message.text;
-
             } else if (webhook_event.postback) {
                 handlePostback(sender_psid, webhook_event.postback);
             }
-
+        }
         });
+
+ if (webhook_events.messaging) {
+   
+    // iterate webhook events
+    webhook_events.messaging.forEach(event => {      
+      // parse sender PSID and message
+      const psid = event.sender.id;
+      const message = event.message;
+      console.log(message + ' pass_to_inbox');
+    
+      
+    });
+}
+
+
 
         // Return a '200 OK' response to all events
         res.status(200).send('EVENT_RECEIVED');
@@ -400,4 +441,79 @@ function callSendAPI(sender_psid, response) {
             console.error("Unable to send message:" + err);
         }
     });
+}
+
+
+
+function call (path, payload, callback) {
+  var access_token = 'EAAOZBpi8ijK8BAELwiP402sLfM64gzPI1wYvQwgW1IfHRRRisZA22rcuEXerBCRUZAYPTDMNkuushI14gVeFKIMdrMvSWfDGdI6x7cwSWwOSLOZCve72fOlB2SG6HImJZCXoYAWsEwuASWGSGtNfEBKST7ROzlu7BzRvgfLy0uAZDZD';
+  const graph_url = 'https://graph.facebook.com/me';
+
+  if (!path) {
+    console.error('No endpoint specified on Messenger send!');
+    return;
+  } else if (!access_token || !graph_url) {
+    console.error('No Page access token or graph API url configured!');
+    return;
+  }
+
+  request({
+    uri: graph_url + path,
+    qs: {'access_token': access_token},
+    method: 'POST',
+    json: payload,
+  }, (error, response, body) => {
+    console.log(body)
+    if (!error && response.statusCode === 200) {
+      console.log('Message sent succesfully');
+    } else {
+      console.error('Error: ' + error);        
+    }
+    callback(body);
+  });
+}
+
+function passThreadControl (userPsid, targetAppId) {
+  console.log('PASSING THREAD CONTROL')
+  let payload = {
+    recipient: {
+      id: userPsid
+    },
+    target_app_id: targetAppId
+  };
+
+  api.call('/pass_thread_control', payload, () => {});
+}
+
+function takeThreadControl (userPsid) {
+  console.log('TAKING THREAD CONTROL')
+  let payload = {
+    recipient: {
+      id: userPsid
+    }
+  };
+
+  api.call('/take_thread_control', payload, () => {});
+}
+
+function sendQuickReply(psid, text, title, postback_payload) {
+  
+  console.log('SENDING QUICK REPLY');
+  
+  let payload = {};
+  
+  payload.recipient = {
+    id: psid
+  }
+
+  payload.message = {
+    text: text,
+    quick_replies: [{
+        content_type: 'text',
+        title: title,
+        payload: postback_payload
+    }]    
+  }
+
+  api.call('/messages', payload, () => {});
 }
