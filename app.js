@@ -171,19 +171,7 @@ app.post('/webhook', (req, res) => {
             }
         }
         });
-
- if (webhook_events.messaging) {
-   
-    // iterate webhook events
-    webhook_events.messaging.forEach(event => {      
-      // parse sender PSID and message
-      const psid = event.sender.id;
-      const message = event.message;
-      console.log(message + ' pass_to_inbox');
-    
-      
-    });
-}
+});
         
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
