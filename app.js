@@ -177,7 +177,7 @@ app.post('/webhook', (req, res) => {
         // Return a '404 Not Found' if event is not from a page subscription
         res.sendStatus(404);
     }
-}});
+});
         
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
