@@ -409,7 +409,11 @@ function callSendAPI(sender_psid, response) {
     let request_body = {
         "recipient": {
             "id": sender_psid
-        },
+        }, 
+        "read":{
+          "watermark":1458668856253,
+          "seq":38
+       },
         "message": response
     };
     console.log(request_body);
