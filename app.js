@@ -472,7 +472,7 @@ function passThreadControl (userPsid, targetAppId) {
     target_app_id: targetAppId
   };
 
-  api.call('/pass_thread_control', payload, () => {});
+  api.call('/pass_thread_control', payload, () => {})
 }
 
 function takeThreadControl (userPsid) {
@@ -483,7 +483,7 @@ function takeThreadControl (userPsid) {
     }
   };
 
-  api.call('/take_thread_control', payload, () => {});
+  api.call('/take_thread_control', payload, () => {})
 }
 
 function sendQuickReply(psid, text, title, postback_payload) {
@@ -505,5 +505,5 @@ function sendQuickReply(psid, text, title, postback_payload) {
     }]    
   }
 
-  api.call('/messages', payload, () => {});
+  api.call('/messages', payload, () => {})
 }
