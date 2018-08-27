@@ -169,8 +169,14 @@ app.post('/webhook', (req, res) => {
             } else if (webhook_event.postback) {
                 handlePostback(sender_psid, webhook_event.postback);
             }
+            
         }
-        });
+       });
+       res.status(200).send('EVENT_RECEIVED');
+    } else {
+        // Return a '404 Not Found' if event is not from a page subscription
+        res.sendStatus(404);
+    }
 }});
         
 // Accepts GET requests at the /webhook endpoint
