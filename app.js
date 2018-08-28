@@ -168,7 +168,7 @@ app.post('/webhook', (req, res) => {
                 payload = 'take_from_inbox';
 
                 sendQuickReply(psid, text, title, payload);
-                HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
+                //HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
 
               } else if (event.pass_thread_control) {
                 console.log(event.pass_thread_control);
