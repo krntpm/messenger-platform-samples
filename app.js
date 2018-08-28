@@ -143,7 +143,7 @@ app.post('/webhook', (req, res) => {
                 payload = 'pass_to_inbox';
 
                 sendQuickReply(psid, text, title, payload);
-                HandoverProtocol.takeThreadControl(psid);
+                //HandoverProtocol.takeThreadControl(psid);
               }
 
             });   
