@@ -588,7 +588,13 @@ app.post('/ThreadControl', (req, res) => {
             res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_BACK_TO_PRIME}'));
 
     } else if(body.recipientId !== undefined && body.term  !== undefined && body.method  === 'forback') {
-              callSendAPI(body.recipientId, body.term);
+         let response;
+         var text = '';     
+         response = {
+                 //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
+                   "text": `${body.term}` 
+                };
+            callSendAPI(body.recipientId, response);
             res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_SEND_TO_MESSAGE}'));
     } else {
       res.sendStatus(403);
