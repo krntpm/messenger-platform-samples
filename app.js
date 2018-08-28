@@ -161,7 +161,8 @@ app.post('/webhook', (req, res) => {
               if (message && message.quick_reply && message.quick_reply.payload == 'pass_to_inbox') {
                   console.log('message.quick_reply');
                 // quick reply to pass to Page inbox was clicked
-                let page_inbox_app_id = 263902037430900;          
+               // let page_inbox_app_id = 263902037430900;      
+                  let page_inbox_app_id = 1054045894773935; 
                 text = 'The Primary Receiver is passing control to the Page Inbox. \n\n Tap "Take From Inbox" to have the Primary Receiver take control back.';
                 title = 'Take From Inbox';
                 payload = 'take_from_inbox';
@@ -178,14 +179,14 @@ app.post('/webhook', (req, res) => {
 
                 sendQuickReply(psid, text, title, payload);
 
-              } else if (message && !message.is_echo) {      
-                console.log('message.is_echo');
+             // } else if (message && !message.is_echo) {      
+              //  console.log('message.is_echo');
                 // default
-                text = 'Welcome! The bot is currently in control. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
-                title = 'Pass to Inbox';
-                payload = 'pass_to_inbox';
+             //   text = 'Welcome! The bot is currently in control. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
+             //   title = 'Pass to Inbox';
+             //   payload = 'pass_to_inbox';
 
-                sendQuickReply(psid, text, title, payload);
+             //   sendQuickReply(psid, text, title, payload);
               } else {
                     console.log('else');
                     body.entry.forEach(entry => {
