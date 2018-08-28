@@ -143,7 +143,7 @@ app.post('/webhook', (req, res) => {
                 payload = 'pass_to_inbox';
 
                 sendQuickReply(psid, text, title, payload);
-                //HandoverProtocol.takeThreadControl(psid);
+                HandoverProtocol.takeThreadControl(psid);
               }
 
             });   
@@ -161,14 +161,14 @@ app.post('/webhook', (req, res) => {
               if (message && message.quick_reply && message.quick_reply.payload == 'pass_to_inbox') {
                   console.log('message.quick_reply');
                 // quick reply to pass to Page inbox was clicked
-               // let page_inbox_app_id = 263902037430900;      
-                  let page_inbox_app_id = 689501971423050; 
+                let page_inbox_app_id = 263902037430900;      
+               //   let page_inbox_app_id = 689501971423050; 
                 text = 'The Primary Receiver is passing control to the Page Inbox. \n\n Tap "Take From Inbox" to have the Primary Receiver take control back.';
                 title = 'Take From Inbox';
                 payload = 'take_from_inbox';
 
                 sendQuickReply(psid, text, title, payload);
-                //HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
+                HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
 
               } else if (event.pass_thread_control) {
                 console.log(event.pass_thread_control);
