@@ -305,6 +305,9 @@ async function handleMessage(sender_psid, received_message) {
                     if(intentTagData.toLocaleUpperCase().indexOf("CHECK")>-1){
                         intentData = 'check';
                     }
+                    if(received_message.text === 'Agent'){
+                        intentData = 'transfer';
+                    }
                     switch (intentData) {
                         case 'display':
                             text = replyDisplay(messageDataObj);
@@ -312,6 +315,11 @@ async function handleMessage(sender_psid, received_message) {
                         case 'ir':
                              console.info("in ir intent");
                              text = "Ir";  
+                             break;
+                        case 'transfer':
+                             console.info("in transfer intent");
+                             text = "transfer";  
+                             passThreadControl(sender_psid,'689501971423050');
                              break;
                         case 'ontop':
                             console.info("in ontop intent");
@@ -564,32 +572,6 @@ function call (path, payload, callback) {
 };
 
 
-// Accepts GET requests at the /webhook endpoint
-app.post('/passThreadControl', (req, res) => {
-   let body = req.body;
-    res.status(200).send(body);
-    // Parse params from the webhook verification request
-    //let mode = req.query['hub.mode'];
-    //let token = req.query['hub.verify_token'];
-   // let challenge = req.query['hub.challenge'];
-
-    // Check if a token and mode were sent
-    /*if (mode && token) {
-
-        // Check the mode and token sent are correct
-        if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-
-            // Respond with 200 OK and challenge token from the request
-            console.log('WEBHOOK_VERIFIED');
-            res.status(200).send(challenge);
-
-        } else {
-            // Responds with '403 Forbidden' if verify tokens do not match
-            res.sendStatus(403);
-        }
-    }*/
-});
-
 
 app.post('/takeThreadControl', (req, res) => {
    let body = req.body;
@@ -611,10 +593,9 @@ app.post('/takeThreadControl', (req, res) => {
    
 });
 
-
 function recipientToPrime(userPsid){
 
      takeThreadControl(userPsid);   
   
-}
+} 
 
