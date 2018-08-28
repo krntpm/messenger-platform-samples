@@ -598,18 +598,9 @@ app.post('/takeThreadControl', (req, res) => {
     //let mode = req.query['hub.mode'];
     //let token = req.query['hub.verify_token'];
     //let challenge = req.query['hub.challenge'];
-    recipientToPrime(body.recipientId , body.term);
-    // Check if a token and mode were sent
    
-});
-
-
-function recipientToPrime(userPsid , message){
-
-     
-    
-     if (userPsid !== undefined && (message  === 'Exit' || message === 'End')) {
-        takeThreadControl(userPsid);
+   if (body.recipientId !== undefined && (body.term  === 'Exit' || body.term === 'End')) {
+         recipientToPrime(body.recipientId , body.term);
         // Check the mode and token sent are correct      
             console.log('WEBHOOK_BACK_TO_PRIME');
             res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_BACK_TO_PRIME}'));
@@ -617,5 +608,13 @@ function recipientToPrime(userPsid , message){
     }else {
       res.sendStatus(403);
     }
+   
+});
+
+
+function recipientToPrime(userPsid){
+
+     takeThreadControl(userPsid);   
+  
 }
 
