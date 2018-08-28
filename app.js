@@ -614,6 +614,6 @@ app.post('/takeThreadControl', (req, res) => {
 
 function recipientToPrime(userPsid , message){
 
-     HandoverProtocol.takeThreadControl(psid);
+     HandoverProtocol.takeThreadControl(userPsid);
 }
 
