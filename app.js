@@ -573,7 +573,7 @@ function call (path, payload, callback) {
 
 
 
-app.post('/takeThreadControl', (req, res) => {
+app.post('/ThreadControl', (req, res) => {
    let body = req.body;
   
     // Parse params from the webhook verification request
@@ -587,7 +587,9 @@ app.post('/takeThreadControl', (req, res) => {
             console.log('WEBHOOK_BACK_TO_PRIME');
             res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_BACK_TO_PRIME}'));
 
-    }else {
+    } else if(body.recipientId !== undefined && body.term  !== undefined && body.method  === 'Forback') {
+              callSendAPI(sender_psid, body.term)
+    } else {
       res.sendStatus(403);
     }
    
