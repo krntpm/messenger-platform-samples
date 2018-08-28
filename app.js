@@ -581,13 +581,13 @@ app.post('/ThreadControl', (req, res) => {
     //let token = req.query['hub.verify_token'];
     //let challenge = req.query['hub.challenge'];
    
-   if (body.recipientId !== undefined && (body.term  === 'Exit' || body.term === 'End')) {
+   if (body.recipientId !== undefined && (body.term  === 'exit' || body.term === 'end')) {
          recipientToPrime(body.recipientId , body.term);
         // Check the mode and token sent are correct      
             console.log('WEBHOOK_BACK_TO_PRIME');
             res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_BACK_TO_PRIME}'));
 
-    } else if(body.recipientId !== undefined && body.term  !== undefined && body.method  === 'Forback') {
+    } else if(body.recipientId !== undefined && body.term  !== undefined && body.method  === 'forback') {
               callSendAPI(sender_psid, body.term)
     } else {
       res.sendStatus(403);
