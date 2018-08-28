@@ -567,6 +567,7 @@ function call (path, payload, callback) {
 // Accepts GET requests at the /webhook endpoint
 app.post('/passThreadControl', (req, res) => {
    let body = req.body;
+    res.status(200).send('OK');
     // Parse params from the webhook verification request
     //let mode = req.query['hub.mode'];
     //let token = req.query['hub.verify_token'];
@@ -592,7 +593,7 @@ app.post('/passThreadControl', (req, res) => {
 
 app.post('/takeThreadControl', (req, res) => {
    let body = req.body;
-   res.status(200).send(challenge);
+   res.status(200).send('OK');
     // Parse params from the webhook verification request
     //let mode = req.query['hub.mode'];
     //let token = req.query['hub.verify_token'];
