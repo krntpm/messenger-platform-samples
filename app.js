@@ -588,7 +588,8 @@ app.post('/ThreadControl', (req, res) => {
             res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_BACK_TO_PRIME}'));
 
     } else if(body.recipientId !== undefined && body.term  !== undefined && body.method  === 'forback') {
-              callSendAPI(body.recipientId, body.term)
+              callSendAPI(body.recipientId, body.term);
+            res.status(200).send(JSON.stringify('{STATUS:OK,MESSAGE:WEBHOOK_SEND_TO_MESSAGE}'));
     } else {
       res.sendStatus(403);
     }
