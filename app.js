@@ -121,27 +121,102 @@ app.post('/webhook', (req, res) => {
     // Check the webhook event is from a Page subscription
     if (body.object === 'page') {
 
-        body.entry.forEach(entry => {
+        // parse messaging array
+        const webhook_events = body.entry[0];
 
-            // Gets the body of the webhook event
-            let webhook_event = entry.messaging[0];
-            console.log(webhook_event);
+  // initialize quick reply properties
+        let text, title, payload;
 
-            // Get the sender PSID
-            let sender_psid = webhook_event.sender.id;
-            console.log(`Sender PSID: ${sender_psid}`);
+  // Secondary Receiver is in control - listen on standby channel
+         if (webhook_events.standby) {
 
-            // Check if the event is a message or postback and
-            // pass the event to the appropriate handler function
-            if (webhook_event.message) {
-                handleMessage(sender_psid, webhook_event.message);
-               // let message = webhook_event.message.text;
+            // iterate webhook events from standby channel
+            webhook_events.standby.forEach(event => {
 
-            } else if (webhook_event.postback) {
-                handlePostback(sender_psid, webhook_event.postback);
-            }
+              const psid = event.sender.id;
+              const message = event.message;
 
-        });
+              if (message && message.quick_reply && message.quick_reply.payload == 'take_from_inbox') {
+                // quick reply to take from Page inbox was clicked          
+                text = 'The Primary Receiver is taking control back. \n\n Tap "Pass to Inbox" to pass thread control to the Page Inbox.';
+                title = 'Pass to Inbox';
+                payload = 'pass_to_inbox';
+
+                sendQuickReply(psid, text, title, payload);
+                HandoverProtocol.takeThreadControl(psid);
+              }
+
+            });   
+          }        
+          // Bot is in control - listen for messages 
+          if (webhook_events.messaging) {             
+              
+
+            // iterate webhook events
+            webhook_events.messaging.forEach(event => {      
+              // parse sender PSID and message
+              const psid = event.sender.id;
+              const message = event.message;
+
+              if (message && message.quick_reply && message.quick_reply.payload == 'pass_to_inbox') {
+
+                // quick reply to pass to Page inbox was clicked
+                let page_inbox_app_id = 263902037430900;          
+                text = 'The Primary Receiver is passing control to the Page Inbox. \n\n Tap "Take From Inbox" to have the Primary Receiver take control back.';
+                title = 'Take From Inbox';
+                payload = 'take_from_inbox';
+
+                sendQuickReply(psid, text, title, payload);
+                HandoverProtocol.passThreadControl(psid, page_inbox_app_id);
+
+              } else if (event.pass_thread_control) {
+
+                // thread control was passed back to bot manually in Page inbox
+                text = 'You passed control back to the Primary Receiver by marking "Done" in the Page Inbox. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
+                title = 'Pass to Inbox';
+                payload = 'pass_to_inbox';
+
+                sendQuickReply(psid, text, title, payload);
+
+              } else if (message && !message.is_echo) {      
+
+                // default
+                text = 'Welcome! The bot is currently in control. \n\n Tap "Pass to Inbox" to pass control to the Page Inbox.';
+                title = 'Pass to Inbox';
+                payload = 'pass_to_inbox';
+
+                sendQuickReply(psid, text, title, payload);
+              } else {
+              
+                    body.entry.forEach(entry => {
+
+                        // Gets the body of the webhook event
+                        let webhook_event = entry.messaging[0];
+                        console.log(webhook_event);
+
+                        // Get the sender PSID
+                        let sender_psid = webhook_event.sender.id;
+                        console.log(`Sender PSID: ${sender_psid}`);
+
+                        // Check if the event is a message or postback and
+                        // pass the event to the appropriate handler function
+                        if (webhook_event.message) {
+                            handleMessage(sender_psid, webhook_event.message);
+                           // let message = webhook_event.message.text;
+
+                        } else if (webhook_event.postback) {
+                            handlePostback(sender_psid, webhook_event.postback);
+                        }
+
+                    });
+              
+              }
+
+            });
+          }
+        
+        
+      
 
         // Return a '200 OK' response to all events
         res.status(200).send('EVENT_RECEIVED');
@@ -400,3 +475,77 @@ function callSendAPI(sender_psid, response) {
         }
     });
 }
+
+// Send a quick reply message
+function sendQuickReply(psid, text, title, postback_payload) {
+  
+  console.log('SENDING QUICK REPLY');
+  
+  let payload = {};
+  
+  payload.recipient = {
+    id: psid
+  }
+
+  payload.message = {
+    text: text,
+    quick_replies: [{
+        content_type: 'text',
+        title: title,
+        payload: postback_payload
+    }]    
+  }
+
+  api.call('/messages', payload, () => {});
+}
+
+function passThreadControl (userPsid, targetAppId) {
+  console.log('PASSING THREAD CONTROL')
+  let payload = {
+    recipient: {
+      id: userPsid
+    },
+    target_app_id: targetAppId
+  };
+
+  api.call('/pass_thread_control', payload, () => {});
+}
+
+function takeThreadControl (userPsid) {
+  console.log('TAKING THREAD CONTROL')
+  let payload = {
+    recipient: {
+      id: userPsid
+    }
+  };
+
+  api.call('/take_thread_control', payload, () => {});
+}
+
+function call (path, payload, callback) {
+  const access_token = process.env.PAGE_ACCESS_TOKEN || env.PAGE_ACCESS_TOKEN;
+  const graph_url = 'https://graph.facebook.com/me';
+
+  if (!path) {
+    console.error('No endpoint specified on Messenger send!');
+    return;
+  } else if (!access_token || !graph_url) {
+    console.error('No Page access token or graph API url configured!');
+    return;
+  }
+
+  request({
+    uri: graph_url + path,
+    qs: {'access_token': access_token},
+    method: 'POST',
+    json: payload,
+  }, (error, response, body) => {
+    console.log(body)
+    if (!error && response.statusCode === 200) {
+      console.log('Message sent succesfully');
+    } else {
+      console.error('Error: ' + error);        
+    }
+    callback(body);
+  });
+};
