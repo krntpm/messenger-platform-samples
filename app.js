@@ -150,7 +150,7 @@ app.post('/webhook', (req, res) => {
                         console.log(webhook_events);
                         let webhook_event = message;
                         console.log(webhook_event);
-
+                        console.log('Message: '+webhook_event.text);
                         // Get the sender PSID
                         let sender_psid = psid;
                         console.log(`Sender PSID: ${sender_psid}`);
