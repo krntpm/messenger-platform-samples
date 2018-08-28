@@ -162,7 +162,7 @@ app.post('/webhook', (req, res) => {
                   console.log('message.quick_reply');
                 // quick reply to pass to Page inbox was clicked
                // let page_inbox_app_id = 263902037430900;      
-                  let page_inbox_app_id = 1054045894773935; 
+                  let page_inbox_app_id = 689501971423050; 
                 text = 'The Primary Receiver is passing control to the Page Inbox. \n\n Tap "Take From Inbox" to have the Primary Receiver take control back.';
                 title = 'Take From Inbox';
                 payload = 'take_from_inbox';
