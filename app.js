@@ -393,23 +393,37 @@ function modifyMessage(messages){
             return results;    
 }
 function replyDisplay(messageDataObj){
-             var text = '';
+            var o = {} // empty Object
+            var key = 'Data';
+            o[key] = []; // empty Array, which you can push() values into         
+      
+            var o2 = {} // empty Object
+            var key2 = 'Option';
+            o2[key2] = []; // empty Array, which you can push() values into  
+    
+             var text;
+             var text2;
              let messageObj = modifyMessage(messageDataObj['message']);
-             console.log('MESSAGEOBJ : '+messageDataObj['msgParam']['msgSelect']);
+          
              if(messageDataObj['msgParam'] !== undefined && 
                 messageDataObj['msgParam']['msgSelect'] !== undefined &&
                 messageObj['msgSelect']!==undefined){
                     let msgSelects = [];
                     for(var msgSelectObj of messageDataObj['msgParam']['msgSelect']){
                         if(msgSelectObj['title'] !== undefined) {
-                               text += msgSelectObj['title'];
+                            text = { msgSelectObj : msgSelectObj['title'] };
                            }
                         else {
-                               text += msgSelectObj['payload'];
+                            text = { msgSelectObj : msgSelectObj['payload'] };                             
                            }
+                           o[key].push(text);
                     }                   
-                   
-                    return text +' ' + messageObj['msgSelect'];   
+                           text2 = { msgSelectObj : msgSelectObj['payload'],
+                                    msgTitle : messageObj['msgSelect']
+                                  };              
+                           o2[key2].push(text2);
+                    //return    text +' ' + messageObj['msgSelect'];   
+                      return JSON.stringify(o2);
              }else if(messageDataObj['msgParam'] !== undefined && 
                       messageDataObj['msgParam']['msgMore'] !== undefined &&
                       messageObj['msgMore']!==undefined){
