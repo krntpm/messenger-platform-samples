@@ -403,7 +403,7 @@ function modifyMessage(messages){
 }
 function replyDisplay(messageDataObj){
             var o = {} // empty Object
-            var key = 'Data';
+            var key;
             o[key] = []; // empty Array, which you can push() values into         
       
             var o2 = {} // empty Object
@@ -420,12 +420,12 @@ function replyDisplay(messageDataObj){
                     let msgSelects = [];
                     for(var msgSelectObj of messageDataObj['msgParam']['msgSelect']){
                         if(msgSelectObj['title'] !== undefined) {
-                            text = { msgSelectObj : msgSelectObj['title'] };
+                            text = msgSelectObj : msgSelectObj['title'];
                            }
                         else {
-                            text = { msgSelectObj : msgSelectObj['payload'] };                             
+                            text = msgSelectObj['payload'];                             
                            }
-                           o[key].push(JSON.stringify(text));
+                           o[key].push(text);
                     }                   
                            text2 = { msgOption : JSON.stringify(o),
                                     msgTitle : messageObj['msgSelect']
