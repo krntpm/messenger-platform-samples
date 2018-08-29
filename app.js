@@ -351,7 +351,7 @@ async function handleMessage(sender_psid, received_message) {
                                      console.log(responseOption['msgOption']);
                                      console.log(responseOption['msgTitle']);
                                       if(responseOption['msgOption'] !== undefined) {
-                                          const option = responseOption['msgOption'];
+                                          var option = responseOption['msgOption'];
                                           for(var i=0 ; i<option.length;i++) {
                                                     console.log('data :'+res[i]);
                                               var payload = {
