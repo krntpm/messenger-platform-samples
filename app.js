@@ -314,9 +314,9 @@ async function handleMessage(sender_psid, received_message) {
                             responseReply = JSON.parse(replyDisplay(messageDataObj));
                             console.log(responseReply);
                             if(responseReply['Option'] !== undefined) {
-                                console.log(responseReply['Option']);
-                                responseOption = responseReply['Option'];                       
-                             console.log(responseOption['msgOption'][0]);
+                                console.log(responseReply['Option'][0]);
+                                responseOption = responseReply['Option'][0];                       
+                             console.log(responseOption['msgOption']);
                              console.log(responseOption['msgTitle']);
                                 
                             }
