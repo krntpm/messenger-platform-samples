@@ -311,7 +311,7 @@ async function handleMessage(sender_psid, received_message) {
                     }
                     switch (intentData) {
                         case 'display':
-                            responseReply = replyDisplay(messageDataObj);
+                            responseReply = JSON.parse(replyDisplay(messageDataObj));
                             console.log(responseReply);
                             if(responseReply['Option'] !== undefined) {
                                 console.log(responseReply['Option']['msgOption']);
