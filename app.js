@@ -353,12 +353,12 @@ async function handleMessage(sender_psid, received_message) {
                                       if(responseOption['msgOption'] !== undefined) {
                                            responseOption.Data.forEach(res => {
 
-                                               responsePayload = {
+                                              var payload = {
                                                      content_type: 'text',
                                                      title: `${res}`,
                                                      payload: `${res}`
                                                }
-                                            
+                                            responsePayload.push(payload);
                                             });
                                             
                                          }
