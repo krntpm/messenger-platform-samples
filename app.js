@@ -311,7 +311,7 @@ async function handleMessage(sender_psid, received_message) {
                     }
                     switch (intentData) {
                         case 'display':
-                            responseReply = replyDisplay(messageDataObj);
+                            responseReply = replyDisplay(messageDataObj).Option;
                             console.log(responseReply);
                             if(responseReply['msgOption'] !== undefined) {
                                 console.log(responseReply['msgOption']);
@@ -403,7 +403,7 @@ function modifyMessage(messages){
 }
 function replyDisplay(messageDataObj){
             var o = {} // empty Object
-            var key;
+            var key = 'Data';
             o[key] = []; // empty Array, which you can push() values into         
       
             var o2 = {} // empty Object
