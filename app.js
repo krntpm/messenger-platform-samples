@@ -272,9 +272,7 @@ app.get('/webhook', (req, res) => {
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
     let response;  
-    var o = {} // empty Object
-    var responsePayload = 'quick_replies';
-        o[responsePayload] = [];
+    var responsePayload;
     var text = '';
     // Checks if the message contains text
     if (received_message.text) {
@@ -355,12 +353,12 @@ async function handleMessage(sender_psid, received_message) {
                                       if(responseOption['msgOption'] !== undefined) {
                                            responseOption.Data.forEach(res => {
 
-                                               var payload = {
+                                               responsePayload = {
                                                      content_type: 'text',
                                                      title: `${res}`,
                                                      payload: `${res}`
                                                }
-                                              o[responsePayload].push(payload);
+                                            
                                             });
                                             
                                          }
@@ -391,7 +389,7 @@ async function handleMessage(sender_psid, received_message) {
                             title: 'next',
                             payload: 'next'
                     }]*/
-                     o
+                    quick_replies: responsePayload
                 };
                 break;
         }
