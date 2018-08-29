@@ -320,6 +320,16 @@ async function handleMessage(sender_psid, received_message) {
                              console.log(responseOption['msgOption']);
                              console.log(responseOption['msgTitle']);
                              text = responseOption['msgTitle']
+                             const msgOption = responseOption['msgOption'];   
+                                  msgOption.Data.forEach(res => {
+                                      console.log('data :'+res);
+                                            var payload = {
+                                                     content_type: 'text',
+                                                     title: `${res}`,
+                                                     payload: `${res}`
+                                               }
+                                            responsePayload.push(payload);
+                                    }); 
                             }
                             break;
                         case 'ir':
