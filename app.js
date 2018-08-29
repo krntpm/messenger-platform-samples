@@ -395,6 +395,7 @@ function modifyMessage(messages){
 function replyDisplay(messageDataObj){
              var text = '';
              let messageObj = modifyMessage(messageDataObj['message']);
+             console.log('MESSAGEOBJ : '+messageDataObj['msgParam']['msgSelect']);
              if(messageDataObj['msgParam'] !== undefined && 
                 messageDataObj['msgParam']['msgSelect'] !== undefined &&
                 messageObj['msgSelect']!==undefined){
