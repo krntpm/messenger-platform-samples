@@ -291,7 +291,7 @@ async function handleMessage(sender_psid, received_message) {
                 console.log(JSON.stringify(resApi['data']['data']['message'][0]));
                             
                 
-              
+                let responseReply;
                 let responseData = resApi.data;
                 let responseStatusCode = responseData['statusCode'];
                 console.info(`Status Code ${responseStatusCode}`);
@@ -310,7 +310,11 @@ async function handleMessage(sender_psid, received_message) {
                     }
                     switch (intentData) {
                         case 'display':
-                            text = replyDisplay(messageDataObj);
+                            responseReply = replyDisplay(messageDataObj);
+                            console.log(responseReply);
+                            if(responseReply['msgOption']['msgSelectObj'] !== undefined) {
+                             console.log(responseReply['msgOption']['msgSelectObj']);
+                            }
                             break;
                         case 'ir':
                              console.info("in ir intent");
@@ -332,7 +336,7 @@ async function handleMessage(sender_psid, received_message) {
                               }else if(methodName.toLocaleUpperCase()==='BALANCEINTERNET'){
                                      text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ <a href=\"https://goo.gl/RT5cMp\" target=\"_blank\" data-vtz-browse=\"https://goo.gl/RT5cMp\" data-vtz-link-type=\"Web\">";  
                               }else{
-                                 replyDisplay(messageDataObj);
+                                text = replyDisplay(messageDataObj);
                                  //conv.ask(this.TEXT.SERVICE_ERROR);
                               }
                             break;
@@ -426,12 +430,18 @@ function replyDisplay(messageDataObj){
                       return JSON.stringify(o2);
              }else if(messageDataObj['msgParam'] !== undefined && 
                       messageDataObj['msgParam']['msgMore'] !== undefined &&
-                      messageObj['msgMore']!==undefined){
-                         return messageObj['msgMore'];   
-            }else if(messageObj['message']!==undefined){
-                      return messageObj['message'];
-            }else{
-                      return 'อุ่นใจไม่ตอบสนองกรุณาลองใหม่ภายหลัง';
+                      messageObj['msgMore']!==undefined){              
+                       text2 = {  msgTitle : messageObj['msgMore']  };              
+                       o2[key2].push(text2);          
+                      return JSON.stringify(o2);                    
+            }else if(messageObj['message']!==undefined){                     
+                        text2 = {  msgTitle : messageObj['message']  };              
+                       o2[key2].push(text2);          
+                      return JSON.stringify(o2);  
+            }else{          
+                       text2 = {  msgTitle : 'อุ่นใจไม่ตอบสนองกรุณาลองใหม่ภายหลัง'  };              
+                       o2[key2].push(text2);          
+                      return JSON.stringify(o2);  
             }
 }
 
