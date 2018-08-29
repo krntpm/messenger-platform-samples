@@ -427,10 +427,10 @@ function replyDisplay(messageDataObj){
                            }
                            o[key].push(text);
                     }                   
-                           text2 = { msgOption : JSON.stringify(o),
+                           text2 = { msgOption : o,
                                     msgTitle : messageObj['msgSelect']
                                   };              
-                           o2[key2].push(JSON.stringify(text2));
+                           o2[key2].push(text2);
                     //return    text +' ' + messageObj['msgSelect'];   
                       return JSON.stringify(o2);
              }else if(messageDataObj['msgParam'] !== undefined && 
