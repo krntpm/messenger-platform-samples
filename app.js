@@ -418,7 +418,7 @@ function replyDisplay(messageDataObj){
                            }
                            o[key].push(text);
                     }                   
-                           text2 = { msgSelectObj : msgSelectObj['payload'],
+                           text2 = { msgSelectObj : JSON.stringify(o),
                                     msgTitle : messageObj['msgSelect']
                                   };              
                            o2[key2].push(text2);
