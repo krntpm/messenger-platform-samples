@@ -311,10 +311,10 @@ async function handleMessage(sender_psid, received_message) {
                     }
                     switch (intentData) {
                         case 'display':
-                            responseReply = replyDisplay(messageDataObj).Option;
+                            responseReply = replyDisplay(messageDataObj);
                             console.log(responseReply);
-                            if(responseReply['msgOption'] !== undefined) {
-                                console.log(responseReply['msgOption']);
+                            if(responseReply['msgOption']['Data'] !== undefined) {
+                                console.log(responseReply['msgOption']['Data']);
                                 responseOption = responseReply['Data'];                       
                              console.log(responseOption['msgSelectObj']);
                              console.log(responseOption['msgTitle']);
