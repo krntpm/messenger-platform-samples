@@ -391,7 +391,7 @@ async function handleMessage(sender_psid, received_message) {
                             title: 'next',
                             payload: 'next'
                     }]*/
-                    quick_replies:`${JSON.parse(o)}`
+                    quick_replies:${o}
                 };
                 break;
         }
