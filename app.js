@@ -425,19 +425,19 @@ function replyDisplay(messageDataObj){
                         else {
                             text = { msgSelectObj : msgSelectObj['payload'] };                             
                            }
-                           o[key].push(text);
+                           o[key].push(JSON.stringify(text));
                     }                   
                            text2 = { msgOption : JSON.stringify(o),
                                     msgTitle : messageObj['msgSelect']
                                   };              
-                           o2[key2].push(text2);
+                           o2[key2].push(JSON.stringify(text2));
                     //return    text +' ' + messageObj['msgSelect'];   
                       return JSON.stringify(o2);
              }else if(messageDataObj['msgParam'] !== undefined && 
                       messageDataObj['msgParam']['msgMore'] !== undefined &&
                       messageObj['msgMore']!==undefined){              
                        text2 = {  msgTitle : messageObj['msgMore']  };              
-                       o2[key2].push(text2);          
+                       o2[key2].push(JSON.stringify(text2));          
                       return JSON.stringify(o2);                    
             }else if(messageObj['message']!==undefined){                     
                         text2 = {  msgTitle : messageObj['message']  };              
