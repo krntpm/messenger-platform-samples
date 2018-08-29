@@ -315,9 +315,9 @@ async function handleMessage(sender_psid, received_message) {
                             console.log(responseReply);
                             if(responseReply['Option'] !== undefined) {
                                 console.log(responseReply['Option']);
-                                responseOption = responseReply['Option']['Data'];                       
-                             console.log(responseOption);
-                           
+                                responseOption = responseReply['Option'];                       
+                             console.log(responseOption['msgOption']['Data'][0]);
+                             console.log(responseOption['msgTitle']);
                                 
                             }
                             break;
