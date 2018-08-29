@@ -313,8 +313,8 @@ async function handleMessage(sender_psid, received_message) {
                         case 'display':
                             responseReply = replyDisplay(messageDataObj);
                             console.log(responseReply);
-                            if(responseReply['msgOption']['Data'] !== undefined) {
-                                console.log(responseReply['msgOption']['Data']);
+                            if(responseReply['Option'] !== undefined) {
+                                console.log(responseReply['Option']['msgOption']);
                                 responseOption = responseReply['Data'];                       
                              console.log(responseOption['msgSelectObj']);
                              console.log(responseOption['msgTitle']);
