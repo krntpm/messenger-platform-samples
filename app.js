@@ -292,6 +292,7 @@ async function handleMessage(sender_psid, received_message) {
                             
                 
                 let responseReply;
+                let responseOption;
                 let responseData = resApi.data;
                 let responseStatusCode = responseData['statusCode'];
                 console.info(`Status Code ${responseStatusCode}`);
@@ -312,8 +313,11 @@ async function handleMessage(sender_psid, received_message) {
                         case 'display':
                             responseReply = replyDisplay(messageDataObj);
                             console.log(responseReply);
-                            if(responseReply['msgOption']['msgSelectObj'] !== undefined) {
-                             console.log(responseReply['msgOption']['msgSelectObj']);
+                            if(responseReply['Option']['msgOption'] !== undefined) {
+                                responseOption = responseReply['Data'];                       
+                             console.log(responseOption['msgSelectObj']);
+                             console.log(responseOption['msgTitle']);
+                                
                             }
                             break;
                         case 'ir':
