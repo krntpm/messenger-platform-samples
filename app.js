@@ -420,7 +420,7 @@ function replyDisplay(messageDataObj){
                     let msgSelects = [];
                     for(var msgSelectObj of messageDataObj['msgParam']['msgSelect']){
                         if(msgSelectObj['title'] !== undefined) {
-                            text = msgSelectObj : msgSelectObj['title'];
+                            text = msgSelectObj['title'];
                            }
                         else {
                             text = msgSelectObj['payload'];                             
