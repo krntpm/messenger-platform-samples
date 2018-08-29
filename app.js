@@ -316,20 +316,20 @@ async function handleMessage(sender_psid, received_message) {
                             console.log(responseReply);
                             if(responseReply['Option'] !== undefined) {
                                 console.log(responseReply['Option'][0]);
-                                responseOption = responseReply['Option'][0];                       
-                             console.log(responseOption['msgOption']);
-                             console.log(responseOption['msgTitle']);
+                                responseOption = responseReply['Option'][0];                      
+                       
                              text = responseOption['msgTitle']
-                             const msgOption = responseOption['msgOption'];   
-                                  msgOption.Data.forEach(res => {
-                                      console.log('data :'+res);
-                                            var payload = {
+                             if(responseOption['msgOption'] !== undefined) {
+                                  const msgOption = responseOption['msgOption'];   
+                                  msgOption.Data.forEach(res => {                                  
+                                             var payload = {
                                                      content_type: 'text',
                                                      title: `${res}`,
                                                      payload: `${res}`
                                                }
                                             responsePayload.push(payload);
                                     }); 
+                              }   
                             }
                             break;
                         case 'ir':
@@ -361,20 +361,15 @@ async function handleMessage(sender_psid, received_message) {
                                      console.log(responseOption['msgOption']);
                                      console.log(responseOption['msgTitle']);
                                       if(responseOption['msgOption'] !== undefined) {
-                                          var option = responseOption['msgOption'];
-                                          console.log(option.length);
-                                          for(var i=0 ; i<option.length;i++) {
-                                                    console.log('data :'+res[i]);
-                                              var payload = {
+                                           const msgOption = responseOption['msgOption'];   
+                                            msgOption.Data.forEach(res => {                                  
+                                            var payload = {
                                                      content_type: 'text',
-                                                     title: `${res[i]}`,
-                                                     payload: `${res[i]}`
+                                                     title: `${res}`,
+                                                     payload: `${res}`
                                                }
                                             responsePayload.push(payload);
-                                          
-                                          }
-                                        
-                                            
+                                             });                                                                                     
                                          }
                                      text = responseOption['msgTitle']
                                     }
@@ -387,7 +382,27 @@ async function handleMessage(sender_psid, received_message) {
                             break;
                         default:
                             console.info("in default switch case");
-                             text = replyDisplay(messageDataObj);
+                            // text = replyDisplay(messageDataObj);
+                               responseReply = JSON.parse(replyDisplay(messageDataObj));
+                                    console.log(responseReply);
+                                    if(responseReply['Option'] !== undefined) {
+                                        console.log(responseReply['Option'][0]);
+                                        responseOption = responseReply['Option'][0];                       
+                                     console.log(responseOption['msgOption']);
+                                     console.log(responseOption['msgTitle']);
+                                      if(responseOption['msgOption'] !== undefined) {
+                                           const msgOption = responseOption['msgOption'];   
+                                            msgOption.Data.forEach(res => {                                  
+                                            var payload = {
+                                                     content_type: 'text',
+                                                     title: `${res}`,
+                                                     payload: `${res}`
+                                               }
+                                            responsePayload.push(payload);
+                                             });                                                                                     
+                                         }
+                                     text = responseOption['msgTitle']
+                                    }
                             break;
                     }
                 }else{
@@ -395,16 +410,23 @@ async function handleMessage(sender_psid, received_message) {
                 }
 
                 text = urlify(text);
-                response = {
-                 //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
-                   "text": `${text}` ,
-                     /*quick_replies: [{
-                            content_type: 'text',
-                            title: 'next',
-                            payload: 'next'
-                    }]*/
-                    quick_replies: responsePayload
-                };
+                if(responsePayload.length > 0) {
+                    response = {
+                     //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
+                       "text": `${text}` ,
+                         /*quick_replies: [{
+                                content_type: 'text',
+                                title: 'next',
+                                payload: 'next'
+                        }]*/
+                        quick_replies: responsePayload
+                    };
+                } else {
+                    response = {
+                     //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
+                       "text": `${text}`                   
+                    };
+                }
                 break;
         }
     } else {
