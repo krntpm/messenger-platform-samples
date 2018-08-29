@@ -352,7 +352,12 @@ async function handleMessage(sender_psid, received_message) {
                 text = urlify(text);
                 response = {
                  //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
-                   "text": `${text}` 
+                   "text": `${text}` ,
+                     quick_replies: [{
+                            content_type: 'text',
+                            title: 'next',
+                            payload: 'next'
+                    }]
                 };
                 break;
         }
