@@ -400,7 +400,12 @@ function replyDisplay(messageDataObj){
                 messageObj['msgSelect']!==undefined){
                     let msgSelects = [];
                     for(var msgSelectObj of messageDataObj['msgParam']['msgSelect']){
-                        text += msgSelectObj['title'];
+                        if(msgSelectObj['title'] !== undefined) {
+                               text += msgSelectObj['title'];
+                           }
+                        else {
+                               text += msgSelectObj['payload'];
+                           }
                     }                   
                    
                     return text +' ' + messageObj['msgSelect'];   
