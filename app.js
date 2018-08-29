@@ -271,7 +271,10 @@ app.get('/webhook', (req, res) => {
 
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
-    let response;
+    let response;  
+    var o = {} // empty Object
+    var responsePayload = 'quick_replies';
+        o[responsePayload] = [];
     var text = '';
     // Checks if the message contains text
     if (received_message.text) {
@@ -318,7 +321,7 @@ async function handleMessage(sender_psid, received_message) {
                                 responseOption = responseReply['Option'][0];                       
                              console.log(responseOption['msgOption']);
                              console.log(responseOption['msgTitle']);
-                                
+                             text = responseOption['msgTitle']
                             }
                             break;
                         case 'ir':
@@ -341,7 +344,28 @@ async function handleMessage(sender_psid, received_message) {
                               }else if(methodName.toLocaleUpperCase()==='BALANCEINTERNET'){
                                      text = "อุ่นใจยังไม่ได้ให้บริการผ่านช่องทางนี้ครับ สามารถใช้ผ่านช่องทางอื่นได้ที่นี่ <a href=\"https://goo.gl/RT5cMp\" target=\"_blank\" data-vtz-browse=\"https://goo.gl/RT5cMp\" data-vtz-link-type=\"Web\">";  
                               }else{
-                                text = replyDisplay(messageDataObj);
+                                //text = replyDisplay(messageDataObj);
+                                    responseReply = JSON.parse(replyDisplay(messageDataObj));
+                                    console.log(responseReply);
+                                    if(responseReply['Option'] !== undefined) {
+                                        console.log(responseReply['Option'][0]);
+                                        responseOption = responseReply['Option'][0];                       
+                                     console.log(responseOption['msgOption']);
+                                     console.log(responseOption['msgTitle']);
+                                      if(responseOption['msgOption'] !== undefined) {
+                                           responseOption.Data.forEach(res => {
+
+                                               var payload = {
+                                                     content_type: 'text',
+                                                     title: `${res}`,
+                                                     payload: `${res}`
+                                               }
+                                              o[responsePayload].push(payload);
+                                            });
+                                            
+                                         }
+                                     text = responseOption['msgTitle']
+                                    }
                                  //conv.ask(this.TEXT.SERVICE_ERROR);
                               }
                             break;
@@ -362,11 +386,12 @@ async function handleMessage(sender_psid, received_message) {
                 response = {
                  //   "text": `${urlify(resApi['data']['data']['message'][0])}.`
                    "text": `${text}` ,
-                     quick_replies: [{
+                     /*quick_replies: [{
                             content_type: 'text',
                             title: 'next',
                             payload: 'next'
-                    }]
+                    }]*/
+                    quick_replies:`${o[responsePayload]}` ;
                 };
                 break;
         }
