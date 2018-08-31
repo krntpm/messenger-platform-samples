@@ -159,7 +159,7 @@ app.post('/webhook', (req, res) => {
                 
 
             });   
-          }        
+          } else {        
           // Bot is in control - listen for messages 
           if (webhook_events.messaging) {             
               
@@ -227,7 +227,7 @@ app.post('/webhook', (req, res) => {
 
             });
           }
-        
+          }
         
       
 
